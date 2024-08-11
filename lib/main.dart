@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:social_app/pages/home_page.dart';
-import 'package:social_app/pages/login_page.dart';
+import 'package:social_app/pages/login_or_register.dart';
 import 'package:social_app/pages/settings_page.dart';
 import 'package:social_app/themes/theme_provider.dart';
 
@@ -23,9 +23,11 @@ class MyApp extends StatelessWidget {
       routes: {
         '/home': (context) => const HomePage(),
         '/settings': (context) => const SettingsPage(),
+        // '/login': (context) => const LoginPage(),
+        // '/register': (context) => const RegisterPage(),
       },
       theme: Provider.of<ThemeProvider>(context).themeData,
-      home: const LoginPage(),
+      home: const LoginOrRegister(),
     );
   }
 }

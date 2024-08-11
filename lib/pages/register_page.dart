@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:social_app/components/app_button.dart';
-import 'package:social_app/components/app_password_field.dart';
 import 'package:social_app/components/app_text_field.dart';
 import 'package:social_app/components/hashtag_svg.dart';
 import 'package:social_app/themes/text_theme.dart';
 
-class LoginPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   final void Function()? togglePage;
-  const LoginPage({super.key, required this.togglePage});
+  const RegisterPage({super.key, required this.togglePage});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
+  final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,12 +29,20 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 50),
+                hashtagSvg(context),
+                const SizedBox(height: 20),
                 Text(
-                  'LOGIN PAGE',
-                  style: loginTextTheme(context),
+                  'Create an Account',
+                  style: titleTextTheme.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 ),
                 const SizedBox(height: 20),
-                hashtagSvg(context),
+                AppTextField(
+                  controller: emailController,
+                  labelText: "Enter your name",
+                  obscureText: false,
+                ),
                 const SizedBox(height: 20),
                 AppTextField(
                   controller: emailController,
@@ -40,35 +50,30 @@ class _LoginPageState extends State<LoginPage> {
                   obscureText: false,
                 ),
                 const SizedBox(height: 20),
-                AppPasswordField(
+                AppTextField(
                   controller: passwordController,
                   labelText: "Enter your password",
                   obscureText: true,
                 ),
                 const SizedBox(height: 20),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      'Forgot Password?',
-                      style: bodyTextTheme,
-                    ),
-                  ),
+                AppTextField(
+                  controller: confirmPasswordController,
+                  labelText: "Confirm your password",
+                  obscureText: true,
                 ),
                 const SizedBox(height: 20),
                 AppButton(
-                  text: "Login",
+                  text: "Register",
                   onTap: () {
                     Navigator.pushNamed(context, '/home');
                   },
                 ),
-                const SizedBox(height: 50),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Not Registered Yet?',
+                      'Have an account?',
                       style: bodyTextTheme.copyWith(
                         color: Theme.of(context).colorScheme.primary,
                       ),
@@ -77,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                     GestureDetector(
                       onTap: widget.togglePage,
                       child: Text(
-                        'Register Here',
+                        'Login',
                         style: bodyTextTheme.copyWith(
                           color: Theme.of(context).colorScheme.inversePrimary,
                           fontWeight: FontWeight.bold,

@@ -15,7 +15,7 @@ class AppButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 50,
+        height: 60,
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.secondary,
           borderRadius: BorderRadius.circular(12),
@@ -23,7 +23,10 @@ class AppButton extends StatelessWidget {
         child: Center(
           child: Text(
             text,
-            style: bodyTextTheme,
+            style: bodyTextTheme.copyWith(
+              color: Theme.of(context).colorScheme.inversePrimary,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),
