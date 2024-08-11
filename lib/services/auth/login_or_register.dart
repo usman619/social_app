@@ -13,9 +13,11 @@ class _LoginOrRegisterState extends State<LoginOrRegister> {
   bool isLoginPage = true;
 
   void togglePage() {
-    setState(() {
-      isLoginPage = !isLoginPage;
-    });
+    setState(
+      () {
+        isLoginPage = !isLoginPage;
+      },
+    );
   }
 
   @override

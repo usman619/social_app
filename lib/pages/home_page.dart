@@ -14,7 +14,7 @@ class HomePage extends StatelessWidget {
         foregroundColor: Theme.of(context).colorScheme.primary,
         centerTitle: true,
       ),
-      drawer: const AppDrawer(),
+      drawer: AppDrawer(),
       body: const Center(
         child: Text('Welcome to the Home Page'),
       ),
