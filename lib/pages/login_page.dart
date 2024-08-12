@@ -31,7 +31,25 @@ class _LoginPageState extends State<LoginPage> {
       if (mounted) hideLoadingCircle(context);
     } catch (e) {
       if (mounted) hideLoadingCircle(context);
-      print(e.toString());
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('Error'),
+              content: Text(e.toString()),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      }
     }
   }
 
@@ -82,9 +100,7 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 20),
                   AppButton(
                     text: "Login",
-                    onTap: () {
-                      Navigator.pushNamed(context, '/home');
-                    },
+                    onTap: login,
                   ),
                   const SizedBox(height: 30),
                   Row(

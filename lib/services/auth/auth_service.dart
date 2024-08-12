@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 /*
 
 Authentication Service
@@ -9,8 +10,6 @@ Authentication Service
 - Delete Account
 
  */
-
-import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;

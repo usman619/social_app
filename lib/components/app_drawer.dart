@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:social_app/components/app_drawer_tile.dart';
 import 'package:social_app/pages/settings_page.dart';
+import 'package:social_app/services/auth/auth_gate.dart';
 import 'package:social_app/services/auth/auth_service.dart';
 
 /*
@@ -18,8 +19,11 @@ class AppDrawer extends StatelessWidget {
 
   final _auth = AuthService();
 
-  void logout() async {
-    _auth.logout();
+  void logout(BuildContext context) async {
+    await _auth.logout();
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => const AuthGate()),
+    );
   }
 
   @override
@@ -67,11 +71,13 @@ class AppDrawer extends StatelessWidget {
                           builder: (context) => const SettingsPage()));
                 },
               ),
+              const Spacer(),
               AppDrawerTile(
                 title: "LOGOUT",
                 icon: Icons.logout,
-                onTap: logout,
+                onTap: () => logout(context),
               ),
+              const SizedBox(height: 20),
             ],
           ),
         ),

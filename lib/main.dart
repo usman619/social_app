@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         // '/register': (context) => const RegisterPage(),
       },
       theme: Provider.of<ThemeProvider>(context).themeData,
-      home: AuthGate(),
+      home: const AuthGate(),
     );
   }
 }
