@@ -4,6 +4,7 @@ import 'package:social_app/components/app_loading_circle.dart';
 import 'package:social_app/components/app_text_field.dart';
 import 'package:social_app/components/hashtag_svg.dart';
 import 'package:social_app/services/auth/auth_service.dart';
+import 'package:social_app/services/database/database_service.dart';
 import 'package:social_app/themes/text_theme.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -16,6 +17,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final _auth = AuthService();
+  final _db = DatabaseService();
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -31,7 +33,12 @@ class _RegisterPageState extends State<RegisterPage> {
           emailController.text,
           passwordController.text,
         );
+
         if (mounted) hideLoadingCircle(context);
+        _db.saveUserInfoFirebase(
+          name: nameController.text,
+          email: emailController.text,
+        );
       } catch (e) {
         if (mounted) hideLoadingCircle(context);
         if (mounted) {

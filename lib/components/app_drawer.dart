@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_app/components/app_drawer_tile.dart';
+import 'package:social_app/pages/profile_page.dart';
 import 'package:social_app/pages/settings_page.dart';
 import 'package:social_app/services/auth/auth_gate.dart';
 import 'package:social_app/services/auth/auth_service.dart';
@@ -54,12 +55,25 @@ class AppDrawer extends StatelessWidget {
                   Navigator.pop(context);
                 },
               ),
-              // AppDrawerTile(title: "PROFILE",icon: Icons.profile,onTap: () {
-              //   Navigator.of(context).pushReplacementNamed('/profile');
-              // },),
+
               // AppDrawerTile(title: "SEARCH",icon: Icons.search,onTap: () {
               //   Navigator.of(context).pushReplacementNamed('/search');
               // },),
+              AppDrawerTile(
+                title: "PROFILE",
+                icon: Icons.person,
+                onTap: () {
+                  // Navigator.of(context).pushReplacementNamed('/profile');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProfilePage(
+                        uid: _auth.getUserId(),
+                      ),
+                    ),
+                  );
+                },
+              ),
               AppDrawerTile(
                 title: "SETTINGS",
                 icon: Icons.settings,
@@ -71,6 +85,7 @@ class AppDrawer extends StatelessWidget {
                           builder: (context) => const SettingsPage()));
                 },
               ),
+
               const Spacer(),
               AppDrawerTile(
                 title: "LOGOUT",

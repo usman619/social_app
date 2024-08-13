@@ -5,6 +5,7 @@ import 'package:social_app/firebase_options.dart';
 import 'package:social_app/pages/home_page.dart';
 import 'package:social_app/services/auth/auth_gate.dart';
 import 'package:social_app/pages/settings_page.dart';
+import 'package:social_app/services/database/database_provider.dart';
 import 'package:social_app/themes/theme_provider.dart';
 
 void main() async {
@@ -13,10 +14,12 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // Run the App with the Theme Provider
-  runApp(ChangeNotifierProvider(
-    create: (context) => ThemeProvider(),
-    child: const MyApp(),
-  ));
+  runApp(
+    MultiProvider(providers: [
+      ChangeNotifierProvider(create: (context) => ThemeProvider()),
+      ChangeNotifierProvider(create: (context) => DatabaseProvider()),
+    ], child: const MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
