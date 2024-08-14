@@ -1,6 +1,10 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:social_app/models/post.dart';
 import 'package:social_app/models/user.dart';
+import 'package:social_app/services/auth/auth_service.dart';
 /*
 Database Service
   - User Profile
@@ -42,6 +46,37 @@ class DatabaseService {
     } catch (e) {
       print(e);
       return null;
+    }
+  }
+
+  Future<void> updateUserBioInFirebase(String bio) async {
+    String uid = AuthService().getUserId();
+    try {
+      await _db.collection("Users").doc(uid).update({'bio': bio});
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> postMessageToFirebase(String message) async {
+    try {
+      String uid = _auth.currentUser!.uid;
+      UserProfile? user = await getUserFromFirebase(uid);
+      Post post = Post(
+        id: '',
+        uid: uid,
+        name: user!.name,
+        username: user.username,
+        message: message,
+        timestamp: Timestamp.now(),
+        likes: 0,
+        likedBy: [],
+      );
+
+      Map<String, dynamic> newPostMap = post.toMap();
+      await _db.collection("Posts").add(newPostMap);
+    } catch (e) {
+      print(e);
     }
   }
 }

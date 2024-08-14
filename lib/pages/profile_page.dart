@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:social_app/components/app_bio_box.dart';
+import 'package:social_app/components/app_input_alert_box.dart';
+import 'package:social_app/models/user.dart';
+import 'package:social_app/services/auth/auth_service.dart';
+import 'package:social_app/services/database/database_provider.dart';
 import 'package:social_app/themes/text_theme.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -10,24 +16,112 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  late final databaseProvider =
+      Provider.of<DatabaseProvider>(context, listen: false);
+
+  UserProfile? user;
+  String currentUserId = AuthService().getUserId();
+  bool _isLoading = true;
+
+  final bioTextController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    loadUser();
+  }
+
+  Future<void> loadUser() async {
+    user = await databaseProvider.userProfile(widget.uid);
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  Future<void> saveBio() async {
+    setState(() {
+      _isLoading = true;
+    });
+    await databaseProvider.updateBio(bioTextController.text);
+    await loadUser();
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  void _showEditBioBox() {
+    showDialog(
+      context: context,
+      builder: (context) => AppInputAlertBox(
+        textController: bioTextController,
+        hintText: "Edit Bio...",
+        onPressed: saveBio,
+        onPressedText: "Save",
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'PROFILE',
+          _isLoading ? '' : user!.name,
           style: titleTextTheme,
         ),
+        centerTitle: true,
+        foregroundColor: Theme.of(context).colorScheme.primary,
       ),
       body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: ListView(
             children: [
-              Text(
-                'UID:${widget.uid}',
-                style: bodyTextTheme,
+              const SizedBox(height: 10),
+              Center(
+                child: Text(
+                  _isLoading ? '' : '@${user!.username}',
+                  style: bodyTextTheme.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
               ),
+              const SizedBox(height: 25),
+              Center(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.secondary,
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  padding: const EdgeInsets.all(25),
+                  child: Icon(
+                    Icons.person,
+                    size: 75,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 25),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Bio',
+                    style: bodyTextTheme.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: _showEditBioBox,
+                    child: Icon(
+                      Icons.edit,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              AppBioBox(text: _isLoading ? '...' : user!.bio),
             ],
           ),
         ),
