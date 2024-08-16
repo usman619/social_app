@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:social_app/components/app_bio_box.dart';
 import 'package:social_app/components/app_input_alert_box.dart';
+import 'package:social_app/components/app_post_tile.dart';
 import 'package:social_app/models/user.dart';
 import 'package:social_app/services/auth/auth_service.dart';
 import 'package:social_app/services/database/database_provider.dart';
@@ -16,6 +17,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  late final listeningProvider = Provider.of<DatabaseProvider>(context);
   late final databaseProvider =
       Provider.of<DatabaseProvider>(context, listen: false);
 
@@ -63,6 +65,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final allUserPosts = databaseProvider.filterUserPosts(widget.uid);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -122,6 +125,22 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               const SizedBox(height: 10),
               AppBioBox(text: _isLoading ? '...' : user!.bio),
+              const SizedBox(height: 5),
+              Divider(
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+              allUserPosts.isEmpty
+                  ? const Center(
+                      child: Text('No posts yet...'),
+                    )
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: allUserPosts.length,
+                      itemBuilder: (context, index) {
+                        return AppPostTile(post: allUserPosts[index]);
+                      },
+                    ),
             ],
           ),
         ),

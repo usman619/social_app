@@ -16,10 +16,16 @@ class DatabaseProvider extends ChangeNotifier {
 
   Future<void> postMessage(String message) async {
     await _db.postMessageToFirebase(message);
+    await loadAllPosts();
   }
 
-  // Future<void> fetchPosts() async {
-  //   _allPosts = await _db.getAllPostsFromFirebase();
-  //   notifyListeners();
-  // }
+  Future<void> loadAllPosts() async {
+    final allPosts = await _db.getAllPostsFromFirebase();
+    _allPosts = allPosts;
+    notifyListeners();
+  }
+
+  List<Post> filterUserPosts(String uid) {
+    return _allPosts.where((post) => post.uid == uid).toList();
+  }
 }

@@ -55,15 +55,15 @@ class AppDrawer extends StatelessWidget {
                   Navigator.pop(context);
                 },
               ),
-
-              // AppDrawerTile(title: "SEARCH",icon: Icons.search,onTap: () {
-              //   Navigator.of(context).pushReplacementNamed('/search');
-              // },),
+              AppDrawerTile(
+                title: "SEARCH",
+                icon: Icons.search,
+                onTap: () {},
+              ),
               AppDrawerTile(
                 title: "PROFILE",
                 icon: Icons.person,
                 onTap: () {
-                  // Navigator.of(context).pushReplacementNamed('/profile');
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -85,7 +85,6 @@ class AppDrawer extends StatelessWidget {
                           builder: (context) => const SettingsPage()));
                 },
               ),
-
               const Spacer(),
               AppDrawerTile(
                 title: "LOGOUT",

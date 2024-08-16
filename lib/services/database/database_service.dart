@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:social_app/models/post.dart';
@@ -76,7 +74,19 @@ class DatabaseService {
       Map<String, dynamic> newPostMap = post.toMap();
       await _db.collection("Posts").add(newPostMap);
     } catch (e) {
-      print(e);
+      print(e.toString());
+    }
+  }
+
+  Future<List<Post>> getAllPostsFromFirebase() async {
+    try {
+      QuerySnapshot snapshot = await _db
+          .collection("Posts")
+          .orderBy('timestamp', descending: true)
+          .get();
+      return snapshot.docs.map((doc) => Post.fromDocument(doc)).toList();
+    } catch (e) {
+      return [];
     }
   }
 }
