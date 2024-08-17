@@ -10,6 +10,7 @@ import 'package:social_app/themes/text_theme.dart';
 
 class ProfilePage extends StatefulWidget {
   final String uid;
+
   const ProfilePage({super.key, required this.uid});
 
   @override
@@ -76,36 +77,36 @@ class _ProfilePageState extends State<ProfilePage> {
         foregroundColor: Theme.of(context).colorScheme.primary,
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: ListView(
-            children: [
-              const SizedBox(height: 10),
-              Center(
-                child: Text(
-                  _isLoading ? '' : '@${user!.username}',
-                  style: bodyTextTheme.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+        child: ListView(
+          children: [
+            const SizedBox(height: 10),
+            Center(
+              child: Text(
+                _isLoading ? '' : '@${user!.username}',
+                style: bodyTextTheme.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
-              const SizedBox(height: 25),
-              Center(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary,
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  padding: const EdgeInsets.all(25),
-                  child: Icon(
-                    Icons.person,
-                    size: 75,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+            ),
+            const SizedBox(height: 25),
+            Center(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.secondary,
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                padding: const EdgeInsets.all(25),
+                child: Icon(
+                  Icons.person,
+                  size: 75,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
-              const SizedBox(height: 25),
-              Row(
+            ),
+            const SizedBox(height: 25),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
@@ -123,26 +124,43 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
-              AppBioBox(text: _isLoading ? '...' : user!.bio),
-              const SizedBox(height: 5),
-              Divider(
-                color: Theme.of(context).colorScheme.secondary,
+            ),
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: AppBioBox(text: _isLoading ? '...' : user!.bio),
+            ),
+            const SizedBox(height: 5),
+            Divider(
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Text(
+                'Posts: ${allUserPosts.length}',
+                style: bodyTextTheme.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
               ),
-              allUserPosts.isEmpty
-                  ? const Center(
-                      child: Text('No posts yet...'),
-                    )
-                  : ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: allUserPosts.length,
-                      itemBuilder: (context, index) {
-                        return AppPostTile(post: allUserPosts[index]);
-                      },
-                    ),
-            ],
-          ),
+            ),
+            allUserPosts.isEmpty
+                ? const Center(
+                    child: Text('No posts yet...'),
+                  )
+                : ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: allUserPosts.length,
+                    itemBuilder: (context, index) {
+                      return AppPostTile(
+                        post: allUserPosts[index],
+                        onUserTap: () {},
+                        onPostTap: () {},
+                        showFollowButton: false,
+                      );
+                    },
+                  ),
+          ],
         ),
       ),
     );

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:social_app/components/app_drawer.dart';
 import 'package:social_app/components/app_input_alert_box.dart';
 import 'package:social_app/components/app_post_tile.dart';
+import 'package:social_app/helper/navigate_pages.dart';
 import 'package:social_app/models/post.dart';
 import 'package:social_app/services/database/database_provider.dart';
 import 'package:social_app/themes/text_theme.dart';
@@ -89,7 +90,11 @@ class _HomePageState extends State<HomePage> {
             itemCount: posts.length,
             itemBuilder: (context, index) {
               final post = posts[index];
-              return AppPostTile(post: post);
+              return AppPostTile(
+                  post: post,
+                  onUserTap: () => goUserProfile(context, post.uid),
+                  onPostTap: () => goPostPost(context, post),
+                  showFollowButton: true);
             },
           );
   }

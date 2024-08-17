@@ -1,12 +1,20 @@
+// import 'dart:js_interop';
+
 import 'package:flutter/material.dart';
 import 'package:social_app/models/post.dart';
 import 'package:social_app/themes/text_theme.dart';
 
 class AppPostTile extends StatefulWidget {
   final Post post;
+  final void Function()? onUserTap;
+  final void Function()? onPostTap;
+  final bool showFollowButton;
   const AppPostTile({
     super.key,
     required this.post,
+    required this.onUserTap,
+    required this.onPostTap,
+    required this.showFollowButton,
   });
 
   @override
@@ -16,93 +24,106 @@ class AppPostTile extends StatefulWidget {
 class _AppPostTileState extends State<AppPostTile> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.secondary,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              // Profile picture
-              Icon(
-                Icons.person,
-                size: 30,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              const SizedBox(width: 10),
-              // Name and Username
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Name
-                  Text(
-                    widget.post.name,
-                    style: bodyTextTheme.copyWith(
-                        fontSize: 16,
+    return GestureDetector(
+      onTap: widget.onPostTap,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.secondary,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                // Profile Picture, Name, Username
+                GestureDetector(
+                  onTap: widget.onUserTap,
+                  child: Row(
+                    children: [
+                      // Profile picture
+                      Icon(
+                        Icons.person,
+                        size: 30,
                         color: Theme.of(context).colorScheme.primary,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  // Username5.0
-                  Text(
-                    '@${widget.post.username}',
-                    style: bodyTextTheme.copyWith(
-                      fontSize: 14,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                ],
-              ),
-              const Spacer(),
-              TextButton(
-                onPressed: () {},
-                style: TextButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+                      ),
+                      const SizedBox(width: 10),
+                      // Name and Username
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Name
+                          Text(
+                            widget.post.name,
+                            style: bodyTextTheme.copyWith(
+                                fontSize: 16,
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          // Username5.0
+                          Text(
+                            '@${widget.post.username}',
+                            style: bodyTextTheme.copyWith(
+                              fontSize: 14,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-                child: Text(
-                  'Follow',
-                  style: bodyTextTheme.copyWith(
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          // Message
-          Text(
-            widget.post.message,
-            style: bodyTextTheme.copyWith(
-              color: Theme.of(context).colorScheme.inversePrimary,
+                const Spacer(),
+                widget.showFollowButton
+                    ? TextButton(
+                        onPressed: () {},
+                        style: TextButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 5),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        child: Text(
+                          'Follow',
+                          style: bodyTextTheme.copyWith(
+                            color: Colors.white,
+                          ),
+                        ),
+                      )
+                    : const SizedBox.shrink()
+              ],
             ),
-          ),
-          const SizedBox(height: 5),
-          // Likes and Comments
-          //TODO: Add Likes and Comments
-          //TimeStamp
-          Row(
-            children: [
-              const Spacer(),
-              Text(
-                timeAgo(widget.post.timestamp.toDate()),
-                style: bodyTextTheme.copyWith(
-                  fontSize: 12,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-              )
-            ],
-          )
-        ],
+            const SizedBox(height: 10),
+            // Message
+            Text(
+              widget.post.message,
+              style: bodyTextTheme.copyWith(
+                color: Theme.of(context).colorScheme.inversePrimary,
+              ),
+            ),
+            const SizedBox(height: 5),
+            // Likes and Comments
+            //TODO: Add Likes and Comments
+            //TimeStamp
+            Row(
+              children: [
+                const Spacer(),
+                Text(
+                  timeAgo(widget.post.timestamp.toDate()),
+                  style: bodyTextTheme.copyWith(
+                    fontSize: 12,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                )
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -124,4 +145,8 @@ class _AppPostTileState extends State<AppPostTile> {
       return 'now';
     }
   }
+
+  // Widget followButton(bool ){
+
+  // }
 }
