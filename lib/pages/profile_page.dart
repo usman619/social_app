@@ -34,6 +34,7 @@ class _ProfilePageState extends State<ProfilePage> {
     loadUser();
   }
 
+  // User Profile
   Future<void> loadUser() async {
     user = await databaseProvider.userProfile(widget.uid);
     setState(() {
@@ -41,6 +42,7 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
+  // User Bio
   Future<void> saveBio() async {
     setState(() {
       _isLoading = true;
@@ -52,6 +54,7 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
+  // Edit Bio
   void _showEditBioBox() {
     showDialog(
       context: context,
@@ -67,6 +70,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     final allUserPosts = databaseProvider.filterUserPosts(widget.uid);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
