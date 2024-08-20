@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:social_app/models/comment.dart';
 import 'package:social_app/models/post.dart';
 import 'package:social_app/models/user.dart';
 import 'package:social_app/services/auth/auth_service.dart';
@@ -103,5 +104,34 @@ class DatabaseProvider extends ChangeNotifier {
       _likeCount = likeCountOriginal;
       notifyListeners();
     }
+  }
+
+  // Comments
+  // Local Comments
+  Map<String, List<Comment>> _comments = {};
+
+  // get locally stored comments for post
+  List<Comment> getComments(String postId) => _comments[postId] ?? [];
+
+  // Get all comments from Firebase
+  Future<void> loadComments(String postId) async {
+    final comments = await _db.getCommentsFromFirebase(postId);
+    _comments[postId] = comments;
+
+    notifyListeners();
+  }
+
+  // Add a comment to the post
+  Future<void> addComment(String postId, message) async {
+    await _db.addCommentInFirebase(postId, message);
+    // Reload comments
+    await loadComments(postId);
+  }
+
+  // Delete a comment
+  Future<void> deleteComment(String postId, commentId) async {
+    await _db.deleteCommentFromFirebase(commentId);
+    // Reload comments
+    await loadComments(postId);
   }
 }

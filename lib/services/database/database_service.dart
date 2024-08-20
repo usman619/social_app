@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:social_app/models/comment.dart';
 import 'package:social_app/models/post.dart';
 import 'package:social_app/models/user.dart';
 import 'package:social_app/services/auth/auth_service.dart';
@@ -7,7 +8,7 @@ import 'package:social_app/services/auth/auth_service.dart';
 Database Service
   - User Profile [Done]
   - Post message [Done]
-  - Likes
+  - Likes [Done]
   - Comments
   - Delete Account
   - Report Account
@@ -141,6 +142,57 @@ class DatabaseService {
       );
     } catch (e) {
       print(e.toString());
+    }
+  }
+
+  // Comment on Post
+  // Add a comment to the post
+  Future<void> addCommentInFirebase(String postId, message) async {
+    try {
+      // Get the user info
+      String uid = _auth.currentUser!.uid;
+      UserProfile? user = await getUserFromFirebase(uid);
+
+      // Create a new comment
+      Comment newComment = Comment(
+        id: '',
+        postId: postId,
+        uid: uid,
+        name: user!.name,
+        username: user.username,
+        message: message,
+        timestamp: Timestamp.now(),
+      );
+
+      // Convert to Map
+      Map<String, dynamic> newCommentMap = newComment.toMap();
+      await _db.collection("Comments").add(newCommentMap);
+    } catch (e) {
+      e.toString();
+    }
+  }
+
+  // Delete a comment
+  Future<void> deleteCommentFromFirebase(String commentId) async {
+    try {
+      await _db.collection("Comments").doc(commentId).delete();
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  // Fetch all comments
+  Future<List<Comment>> getCommentsFromFirebase(String postId) async {
+    try {
+      QuerySnapshot snapshot = await _db
+          .collection("Comments")
+          .where("postId", isEqualTo: postId)
+          .get();
+
+      return snapshot.docs.map((doc) => Comment.fromDocument(doc)).toList();
+    } catch (e) {
+      print(e.toString());
+      return [];
     }
   }
 }

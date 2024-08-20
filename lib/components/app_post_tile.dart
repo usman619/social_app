@@ -1,7 +1,11 @@
 // import 'dart:js_interop';
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:social_app/components/app_input_alert_box.dart';
+import 'package:social_app/helper/time_ago.dart';
 import 'package:social_app/models/post.dart';
 import 'package:social_app/services/auth/auth_service.dart';
 import 'package:social_app/services/database/database_provider.dart';
@@ -29,6 +33,13 @@ class _AppPostTileState extends State<AppPostTile> {
   late final databaseProvider =
       Provider.of<DatabaseProvider>(context, listen: false);
   final String currentUid = AuthService().getUserId();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadComments();
+  }
+
   // More options for posts
   void _showOptions() {
     final bool isOwnPost = widget.post.uid == currentUid;
@@ -121,6 +132,39 @@ class _AppPostTileState extends State<AppPostTile> {
     }
   }
 
+  final TextEditingController _commentController = TextEditingController();
+  // New Comment Box
+  void _openCommentBox() {
+    showDialog(
+      context: context,
+      builder: (context) => AppInputAlertBox(
+        textController: _commentController,
+        hintText: 'Write a comment...',
+        onPressed: _addComment,
+        onPressedText: 'Comment',
+      ),
+    );
+  }
+
+  Future<void> _addComment() async {
+    // If the message is empty, return
+    if (_commentController.text.trim().isEmpty) return;
+    try {
+      await databaseProvider.addComment(
+          widget.post.id, _commentController.text.trim());
+
+      // Clear the comment box
+      _commentController.clear();
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  // Load Comments
+  Future<void> _loadComments() async {
+    await databaseProvider.loadComments(widget.post.id);
+  }
+
   // Show follow button if the post is not the user's own post
   // TODO: Implement follow functionality for other users if not followed yet
   Widget _showFollowButthon() {
@@ -148,8 +192,13 @@ class _AppPostTileState extends State<AppPostTile> {
 
   @override
   Widget build(BuildContext context) {
+    // Like related
     bool likedByCurrentUser = listeningProvider.isPostLiked(widget.post.id);
     int likeCount = listeningProvider.getLikeCount(widget.post.id);
+
+    // Comment related
+    int commentCount = listeningProvider.getComments(widget.post.id).length;
+
     return GestureDetector(
       onTap: widget.onPostTap,
       child: Container(
@@ -227,46 +276,57 @@ class _AppPostTileState extends State<AppPostTile> {
             const SizedBox(height: 5),
             Row(
               children: [
-                // Likes
-                GestureDetector(
-                  onTap: _toggleLikePost,
+                // Like section
+                SizedBox(
+                  width: 70,
                   child: Row(
                     children: [
-                      likedByCurrentUser
-                          ? const Icon(
-                              Icons.favorite,
-                              color: Colors.red,
-                            )
-                          : Icon(
-                              Icons.favorite_border,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 5),
-                Text('$likeCount',
-                    style: bodyTextTheme.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                    )),
-                const SizedBox(width: 5),
-                // Comments
-                GestureDetector(
-                  onTap: () {},
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.comment,
-                        color: Theme.of(context).colorScheme.primary,
+                      GestureDetector(
+                        onTap: _toggleLikePost,
+                        child: likedByCurrentUser
+                            ? const Icon(
+                                Icons.favorite,
+                                color: Colors.red,
+                              )
+                            : Icon(
+                                Icons.favorite_border,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        '$likeCount',
+                        style: bodyTextTheme.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(width: 5),
-                Text('count',
-                    style: bodyTextTheme.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                    )),
+
+                // Comments
+                SizedBox(
+                  width: 70,
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: _openCommentBox,
+                        child: Icon(
+                          Icons.comment,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        commentCount.toString(),
+                        style: bodyTextTheme.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
                 const Spacer(),
                 //TimeStamp
                 Text(
@@ -283,26 +343,4 @@ class _AppPostTileState extends State<AppPostTile> {
       ),
     );
   }
-
-  String timeAgo(DateTime timestamp) {
-    final now = DateTime.now();
-    final difference = now.difference(timestamp);
-    if (difference.inDays > 365) {
-      return '${(difference.inDays / 365).floor()}y';
-    } else if (difference.inDays > 30) {
-      return '${(difference.inDays / 30).floor()}m';
-    } else if (difference.inDays > 0) {
-      return '${difference.inDays}d ago';
-    } else if (difference.inHours > 0) {
-      return '${difference.inHours}h ago';
-    } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes}m ago';
-    } else {
-      return 'now';
-    }
-  }
-
-  // Widget followButton(bool ){
-
-  // }
 }
