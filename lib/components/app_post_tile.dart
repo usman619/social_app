@@ -84,6 +84,7 @@ class _AppPostTileState extends State<AppPostTile> {
                   ),
                   onTap: () {
                     Navigator.pop(context);
+                    _reportPostConfirmBox();
                   },
                 ),
                 ListTile(
@@ -99,6 +100,7 @@ class _AppPostTileState extends State<AppPostTile> {
                   ),
                   onTap: () {
                     Navigator.pop(context);
+                    _blockUserConfirmBox();
                   },
                 ),
               ],
@@ -120,6 +122,68 @@ class _AppPostTileState extends State<AppPostTile> {
           ),
         );
       },
+    );
+  }
+
+  // Report Post Confirm Box
+  void _reportPostConfirmBox() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Report Post', style: titleTextTheme),
+        content: Text('Are you sure you want to report this post?',
+            style: bodyTextTheme),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancel', style: bodyTextTheme),
+          ),
+          TextButton(
+            onPressed: () async {
+              await databaseProvider.reportUser(
+                  widget.post.id, widget.post.uid);
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Post Reported!', style: bodyTextTheme),
+                ),
+              );
+            },
+            child: Text('Report', style: bodyTextTheme),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Block User Confirm Box
+  void _blockUserConfirmBox() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Block User', style: titleTextTheme),
+        content: Text('Are you sure you want to block this user?',
+            style: bodyTextTheme),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancel', style: bodyTextTheme),
+          ),
+          TextButton(
+            onPressed: () async {
+              // Block the user
+              await databaseProvider.blockUser(widget.post.uid);
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('User Blocked!', style: bodyTextTheme),
+                ),
+              );
+            },
+            child: Text('Block', style: bodyTextTheme),
+          ),
+        ],
+      ),
     );
   }
 

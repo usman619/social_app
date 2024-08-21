@@ -26,7 +26,7 @@ class Comment {
 
   factory Comment.fromDocument(DocumentSnapshot doc) {
     return Comment(
-      id: doc['id'],
+      id: doc.id,
       postId: doc['postId'],
       uid: doc['uid'],
       name: doc['name'],
@@ -37,7 +37,6 @@ class Comment {
   }
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'postId': postId,
       'uid': uid,
       'name': name,

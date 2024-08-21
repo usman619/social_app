@@ -9,7 +9,7 @@ Database Service
   - User Profile [Done]
   - Post message [Done]
   - Likes [Done]
-  - Comments
+  - Comments [Done]
   - Delete Account
   - Report Account
   - Block Account
@@ -195,4 +195,61 @@ class DatabaseService {
       return [];
     }
   }
+
+  // Report User
+  Future<void> reportUserInFirebase(String postId, userId) async {
+    final currentUserId = _auth.currentUser!.uid;
+
+    final report = {
+      'reportedBy': currentUserId,
+      'messageId': postId,
+      'messageOwner': userId,
+      'timestamp': FieldValue.serverTimestamp(),
+    };
+
+    // Save the report in Firebase
+    await _db.collection("Reports").add(report);
+  }
+
+  // Block User
+  Future<void> blockUserInFirebase(String userId) async {
+    final currentUserId = _auth.currentUser!.uid;
+
+    await _db
+        .collection("Users")
+        .doc(currentUserId)
+        .collection("BlockedUsers")
+        .doc(userId)
+        .set({});
+  }
+
+  // Unblock User
+  Future<void> unblockUserInFirebase(String userId) async {
+    final currentUserId = _auth.currentUser!.uid;
+
+    await _db
+        .collection("Users")
+        .doc(currentUserId)
+        .collection("BlockedUsers")
+        .doc(userId)
+        .delete();
+  }
+
+  // Get all blocked users
+  Future<List<String>> getBlockedUsersFromFirebase() async {
+    final currentUserId = _auth.currentUser!.uid;
+
+    try {
+      QuerySnapshot snapshot = await _db
+          .collection("Users")
+          .doc(currentUserId)
+          .collection("BlockedUsers")
+          .get();
+      return snapshot.docs.map((doc) => doc.id).toList();
+    } catch (e) {
+      print(e.toString());
+      return [];
+    }
+  }
+  // Delete Account
 }

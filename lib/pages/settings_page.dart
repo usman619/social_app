@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:social_app/components/app_settings_tile.dart';
+import 'package:social_app/helper/navigate_pages.dart';
 import 'package:social_app/themes/text_theme.dart';
 import 'package:social_app/themes/theme_provider.dart';
 
@@ -28,6 +29,7 @@ class SettingsPage extends StatelessWidget {
       ),
       body: Column(
         children: [
+          // Light Mode <--> Dark Mode
           AppSettingsTile(
             title: 'Dark Mode',
             action: CupertinoSwitch(
@@ -36,6 +38,17 @@ class SettingsPage extends StatelessWidget {
                 Provider.of<ThemeProvider>(context, listen: false)
                     .toggleTheme();
               },
+            ),
+          ),
+          // Block Users
+          AppSettingsTile(
+            title: 'Block Users',
+            action: GestureDetector(
+              onTap: () => goBlockUsersPage(context),
+              child: Icon(
+                Icons.arrow_forward_ios,
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
           ),
         ],

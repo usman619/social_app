@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_app/models/post.dart';
+import 'package:social_app/pages/blocked_users_page.dart';
 import 'package:social_app/pages/post_page.dart';
 import 'package:social_app/pages/profile_page.dart';
 
@@ -19,6 +20,16 @@ void goPostPost(BuildContext context, Post post) {
     context,
     MaterialPageRoute(
       builder: (context) => PostPage(post: post),
+    ),
+  );
+}
+
+// Goto Blocked Users Page
+void goBlockUsersPage(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => BlockedUsersPage(),
     ),
   );
 }

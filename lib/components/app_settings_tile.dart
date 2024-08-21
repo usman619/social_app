@@ -15,10 +15,10 @@ class AppSettingsTile extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.secondary,
-        borderRadius: BorderRadius.circular(25),
+        borderRadius: BorderRadius.circular(15),
       ),
-      padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.all(25),
+      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.fromLTRB(15, 15, 15, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
