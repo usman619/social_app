@@ -43,12 +43,25 @@ class SettingsPage extends StatelessWidget {
           // Block Users
           AppSettingsTile(
             title: 'Block Users',
-            action: GestureDetector(
-              onTap: () => goBlockUsersPage(context),
-              child: Icon(
+            action: IconButton(
+              onPressed: () => goBlockUsersPage(context),
+              icon: Icon(
                 Icons.arrow_forward_ios,
                 color: Theme.of(context).colorScheme.primary,
               ),
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+          // Account Settings
+          AppSettingsTile(
+            title: 'Account Settings',
+            action: IconButton(
+              onPressed: () => goAccountSettingsPage(context),
+              icon: Icon(
+                Icons.arrow_forward_ios,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              color: Theme.of(context).colorScheme.primary,
             ),
           ),
         ],

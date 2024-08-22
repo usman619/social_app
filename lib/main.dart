@@ -2,9 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:social_app/firebase_options.dart';
-import 'package:social_app/pages/home_page.dart';
+
 import 'package:social_app/services/auth/auth_gate.dart';
-import 'package:social_app/pages/settings_page.dart';
 import 'package:social_app/services/database/database_provider.dart';
 import 'package:social_app/themes/theme_provider.dart';
 
@@ -30,14 +29,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Social App',
       debugShowCheckedModeBanner: false,
+      initialRoute: '/',
       routes: {
-        '/home': (context) => const HomePage(),
-        '/settings': (context) => const SettingsPage(),
-        // '/login': (context) => const LoginPage(),
-        // '/register': (context) => const RegisterPage(),
+        '/': (context) => const AuthGate(),
       },
       theme: Provider.of<ThemeProvider>(context).themeData,
-      home: const AuthGate(),
     );
   }
 }

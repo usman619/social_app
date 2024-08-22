@@ -111,6 +111,7 @@ class AppCommentTile extends StatelessWidget {
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           GestureDetector(
             onTap: onUserTap,
@@ -143,12 +144,6 @@ class AppCommentTile extends StatelessWidget {
                         color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
-                    Text(
-                      comment.message,
-                      style: bodyTextTheme.copyWith(
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                      ),
-                    ),
                   ],
                 ),
                 const Spacer(),
@@ -162,6 +157,14 @@ class AppCommentTile extends StatelessWidget {
               ],
             ),
           ),
+          const SizedBox(height: 10),
+          Text(
+            comment.message,
+            style: bodyTextTheme.copyWith(
+              color: Theme.of(context).colorScheme.inversePrimary,
+            ),
+          ),
+          const SizedBox(height: 10),
           Row(
             children: [
               const Spacer(),

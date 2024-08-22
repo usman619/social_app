@@ -44,9 +44,23 @@ class _PostPageState extends State<PostPage> {
               onPostTap: () {},
               showFollowButton: false,
             ),
+            const SizedBox(height: 10),
+            Divider(
+              height: 10,
+              thickness: 1,
+              indent: 20,
+              endIndent: 20,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            const SizedBox(height: 10),
             // All Comments on this post
             allComments.isEmpty
-                ? const Center(child: Text("No Comments"))
+                ? Center(
+                    child: Text(
+                      "No Comments",
+                      style: bodyTextTheme,
+                    ),
+                  )
                 : ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),

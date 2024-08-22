@@ -60,6 +60,51 @@ class DatabaseService {
     }
   }
 
+  // Delete User Account
+  Future<void> deleteUserInfoFromFirebase(String uid) async {
+    WriteBatch deleteBatch = _db.batch();
+
+    // delete user doc
+    DocumentReference userDoc = _db.collection("Users").doc(uid);
+    deleteBatch.delete(userDoc);
+
+    // delete all posts
+    QuerySnapshot userPosts =
+        await _db.collection("Posts").where("uid", isEqualTo: uid).get();
+    for (var post in userPosts.docs) {
+      deleteBatch.delete(post.reference);
+    }
+
+    // delete all comments
+    QuerySnapshot userComments =
+        await _db.collection("Comments").where("uid", isEqualTo: uid).get();
+    for (var comment in userComments.docs) {
+      deleteBatch.delete(comment.reference);
+    }
+
+    await deleteBatch.commit();
+
+    // Update Batch
+    WriteBatch updateBatch = _db.batch();
+
+    QuerySnapshot allPosts = await _db.collection("Posts").get();
+    for (QueryDocumentSnapshot post in allPosts.docs) {
+      Map<String, dynamic> postData = post.data() as Map<String, dynamic>;
+      var likedBy = postData['likedBy'] as List<dynamic>? ?? [];
+      if (likedBy.contains(uid)) {
+        updateBatch.update(
+          post.reference,
+          {
+            'likedBy': FieldValue.arrayRemove([uid]),
+            'likes': FieldValue.increment(-1),
+          },
+        );
+      }
+    }
+
+    await updateBatch.commit();
+  }
+
   // Post a message
   Future<void> postMessageToFirebase(String message) async {
     try {
