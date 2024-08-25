@@ -10,9 +10,9 @@ Database Service
   - Post message [Done]
   - Likes [Done]
   - Comments [Done]
-  - Delete Account
-  - Report Account
-  - Block Account
+  - Delete Account [Done]
+  - Report Account [Done]
+  - Block Account [Done]
   - Follow/Unfollow
   - Search
 */
@@ -296,5 +296,62 @@ class DatabaseService {
       return [];
     }
   }
-  // Delete Account
+
+  // Follow User
+  Future<void> followUserInFirebase(String uid) async {
+    // Current User ID
+    final currentUserId = _auth.currentUser!.uid;
+
+    // Add the user to curent user's following list
+    await _db
+        .collection("Users")
+        .doc(currentUserId)
+        .collection("Following")
+        .doc(uid)
+        .set({});
+    // Add the current user to the user's followers list
+    await _db
+        .collection("Users")
+        .doc(uid)
+        .collection("Followers")
+        .doc(currentUserId)
+        .set({});
+  }
+
+  // Unfollow User
+  Future<void> unfollowUserInFirebase(String uid) async {
+    // Current User ID
+    final currentUserId = _auth.currentUser!.uid;
+
+    // Remove the user from the current user's following list
+    await _db
+        .collection("Users")
+        .doc(currentUserId)
+        .collection("Following")
+        .doc(uid)
+        .delete();
+
+    // Remove the current user from the user's followers list
+    await _db
+        .collection("Users")
+        .doc(uid)
+        .collection("Followers")
+        .doc(currentUserId)
+        .delete();
+  }
+
+  // Get users following list: uid
+  Future<List<String>> getFollowingUidsFromFirebase(String uid) async {
+    final snapshot =
+        await _db.collection("Users").doc(uid).collection("Following").get();
+    return snapshot.docs.map((doc) => doc.id).toList();
+  }
+
+  // Get users followers list: uid
+  Future<List<String>> getFollowersUidsFromFirebase(String uid) async {
+    final snapshot =
+        await _db.collection("Users").doc(uid).collection("Followers").get();
+    return snapshot.docs.map((doc) => doc.id).toList();
+  }
+  // Search Users
 }
