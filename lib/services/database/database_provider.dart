@@ -299,4 +299,10 @@ class DatabaseProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  // is user following target user
+  bool isFollowing(String targetUserId) {
+    final currentUserId = _auth.getUserId();
+    return _following[currentUserId]?.contains(targetUserId) ?? false;
+  }
 }
