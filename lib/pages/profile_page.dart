@@ -6,6 +6,7 @@ import 'package:social_app/components/app_input_alert_box.dart';
 import 'package:social_app/components/app_post_tile.dart';
 import 'package:social_app/components/app_profile_stats.dart';
 import 'package:social_app/models/user.dart';
+import 'package:social_app/pages/follow_list_page.dart';
 import 'package:social_app/services/auth/auth_service.dart';
 import 'package:social_app/services/database/database_provider.dart';
 import 'package:social_app/themes/text_theme.dart';
@@ -160,6 +161,16 @@ class _ProfilePageState extends State<ProfilePage> {
               postCount: allUserPosts.length,
               followerCount: followerCount,
               followingCount: followingCount,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FollowListPage(
+                      uid: widget.uid,
+                    ),
+                  ),
+                );
+              },
             ),
             const SizedBox(height: 25),
             // Follow Button

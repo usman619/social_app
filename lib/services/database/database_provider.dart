@@ -305,4 +305,54 @@ class DatabaseProvider extends ChangeNotifier {
     final currentUserId = _auth.getUserId();
     return _following[currentUserId]?.contains(targetUserId) ?? false;
   }
+
+  // Map of Profiles for followers and following
+  final Map<String, List<UserProfile>> _followerProfiles = {};
+  final Map<String, List<UserProfile>> _followingProfiles = {};
+
+  // Getters
+  List<UserProfile> getListOfFollowerProfiles(String uid) =>
+      _followerProfiles[uid] ?? [];
+  List<UserProfile> getListOfFollowingProfiles(String uid) =>
+      _followingProfiles[uid] ?? [];
+
+  // Load all follower profiles
+  Future<void> loadUserFollowerProfiles(String uid) async {
+    try {
+      final followIds = await _db.getFollowersUidsFromFirebase(uid);
+      List<UserProfile> followProfiles = [];
+      for (String followId in followIds) {
+        final followerProfile = await _db.getUserFromFirebase(followId);
+        if (followerProfile != null) {
+          followProfiles.add(followerProfile);
+        }
+      }
+      // Update the local memory
+      _followerProfiles[uid] = followProfiles;
+      // Update UI
+      notifyListeners();
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  // Load all following profiles
+  Future<void> loadUserFollowingProfiles(String uid) async {
+    try {
+      final followIds = await _db.getFollowingUidsFromFirebase(uid);
+      List<UserProfile> followProfiles = [];
+      for (String followId in followIds) {
+        final followingProfile = await _db.getUserFromFirebase(followId);
+        if (followingProfile != null) {
+          followProfiles.add(followingProfile);
+        }
+      }
+      // Update the local memory
+      _followingProfiles[uid] = followProfiles;
+      // Update UI
+      notifyListeners();
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 }
