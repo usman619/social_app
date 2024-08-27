@@ -59,9 +59,15 @@ class _BlockedUsersPageState extends State<BlockedUsersPage> {
     final blockedUsers = listeningProvider.blockedUsers;
     return Scaffold(
       appBar: AppBar(
-        title: Text("BLOCKED USERS", style: titleTextTheme),
+        title: Text("Blocked Users", style: titleTextTheme),
         foregroundColor: Theme.of(context).colorScheme.primary,
         centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: blockedUsers.isEmpty
           ? Center(

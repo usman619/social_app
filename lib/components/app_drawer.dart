@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:social_app/components/app_drawer_tile.dart';
 import 'package:social_app/pages/profile_page.dart';
+import 'package:social_app/pages/search_page.dart';
 import 'package:social_app/pages/settings_page.dart';
 import 'package:social_app/services/auth/auth_gate.dart';
 import 'package:social_app/services/auth/auth_service.dart';
 
 /*
   This Drawer contains the following items:
-  - Home
-  - Profile
-  - Search
-  - Settings
-  - Logout
+  - Home [Done]
+  - Profile [Done]
+  - Search [Done]
+  - Settings [Done]
+  - Logout [Done]
 
 */
 
@@ -58,7 +59,12 @@ class AppDrawer extends StatelessWidget {
               AppDrawerTile(
                 title: "SEARCH",
                 icon: Icons.search,
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const SearchPage()),
+                  );
+                },
               ),
               AppDrawerTile(
                 title: "PROFILE",

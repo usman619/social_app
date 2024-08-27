@@ -23,9 +23,15 @@ class SettingsPage extends StatelessWidget {
     return Scaffold(
       // backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        title: Text('SETTINGS', style: titleTextTheme),
+        title: Text('Settings', style: titleTextTheme),
         foregroundColor: Theme.of(context).colorScheme.primary,
         centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: Column(
         children: [

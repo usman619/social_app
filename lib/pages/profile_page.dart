@@ -236,7 +236,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       return AppPostTile(
                         post: allUserPosts[index],
                         onUserTap: () {},
-                        onPostTap: () {},
+                        onPostTap: () =>
+                            goPostPost(context, allUserPosts[index]),
                         showFollowButton: false,
                       );
                     },

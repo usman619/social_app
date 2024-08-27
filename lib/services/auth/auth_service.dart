@@ -2,13 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 /*
 
 Authentication Service
-- Login
-- Register
-- Logout
-- Reset Password
-- Verify Email
-- Delete Account
-
+- Login [Done]
+- Register [Done]
+- Logout [Done]
+- Reset Password [Done]
+- Delete Account [Done]
+- Verify Email [Will add later]
  */
 
 class AuthService {

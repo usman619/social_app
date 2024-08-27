@@ -225,7 +225,7 @@ class _AppPostTileState extends State<AppPostTile> {
   Future<void> _loadComments() async {
     await databaseProvider.loadComments(widget.post.id);
   }
-
+  // NOTE: Removed it for now
   // Show follow button if the post is not the user's own post
   // Widget _showFollowButthon() {
   //   if (currentUid == widget.post.uid) {

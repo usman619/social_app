@@ -371,4 +371,18 @@ class DatabaseProvider extends ChangeNotifier {
       print(e.toString());
     }
   }
+
+  // Search Users
+  List<UserProfile> _searchResults = [];
+  List<UserProfile> get searchResults => _searchResults;
+
+  Future<void> searchUsers(String searchTerm) async {
+    try {
+      final results = await _db.searchUsersInFirebase(searchTerm);
+      _searchResults = results;
+      notifyListeners();
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 }

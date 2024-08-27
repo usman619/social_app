@@ -59,11 +59,17 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'ACCOUNT SETTINGS',
+          'Account Settings',
           style: titleTextTheme,
         ),
         foregroundColor: Theme.of(context).colorScheme.primary,
         centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,

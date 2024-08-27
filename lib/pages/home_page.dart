@@ -11,7 +11,6 @@ import 'package:social_app/themes/text_theme.dart';
 /*
   Home Page
   - Show two tabs (All Posts, Following Posts)
-
 */
 
 class HomePage extends StatefulWidget {
@@ -71,7 +70,7 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         // backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
-          title: Text('Home Page', style: titleTextTheme),
+          title: Text('Home', style: titleTextTheme),
           foregroundColor: Theme.of(context).colorScheme.primary,
           centerTitle: true,
           bottom: TabBar(

@@ -13,8 +13,8 @@ Database Service
   - Delete Account [Done]
   - Report Account [Done]
   - Block Account [Done]
-  - Follow/Unfollow
-  - Search
+  - Follow/Unfollow [Done]
+  - Search [Done]
 */
 
 class DatabaseService {
@@ -353,5 +353,20 @@ class DatabaseService {
         await _db.collection("Users").doc(uid).collection("Followers").get();
     return snapshot.docs.map((doc) => doc.id).toList();
   }
+
   // Search Users
+  Future<List<UserProfile>> searchUsersInFirebase(String searchText) async {
+    try {
+      QuerySnapshot snapshot = await _db
+          .collection("Users")
+          .where('username', isGreaterThanOrEqualTo: searchText)
+          .where('username', isLessThan: '$searchText\uf8ff')
+          .get();
+
+      return snapshot.docs.map((doc) => UserProfile.fromDocument(doc)).toList();
+    } catch (e) {
+      print(e.toString());
+      return [];
+    }
+  }
 }
