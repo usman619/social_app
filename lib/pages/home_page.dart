@@ -10,6 +10,7 @@ import 'package:social_app/themes/text_theme.dart';
 
 /*
   Home Page
+  - Show two tabs (All Posts, Following Posts)
 
 */
 
@@ -65,26 +66,52 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: AppBar(
-        title: Text('Home Page', style: titleTextTheme),
-        foregroundColor: Theme.of(context).colorScheme.primary,
-        centerTitle: true,
-      ),
-      drawer: AppDrawer(),
-      body: _buildPostList(listeningProvider.allPosts),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _openPostMessage,
-        child: const Icon(Icons.create),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        // backgroundColor: Theme.of(context).colorScheme.surface,
+        appBar: AppBar(
+          title: Text('Home Page', style: titleTextTheme),
+          foregroundColor: Theme.of(context).colorScheme.primary,
+          centerTitle: true,
+          bottom: TabBar(
+            labelStyle: bodyTextTheme.copyWith(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+            labelColor: Theme.of(context).colorScheme.inversePrimary,
+            unselectedLabelColor: Theme.of(context).colorScheme.primary,
+            indicatorColor: Theme.of(context).colorScheme.inversePrimary,
+            dividerColor: Colors.transparent,
+            tabs: const [
+              Tab(
+                text: 'For You',
+              ),
+              Tab(
+                text: 'Following',
+              ),
+            ],
+          ),
+        ),
+        drawer: AppDrawer(),
+        body: TabBarView(
+          children: [
+            _buildPostList(listeningProvider.allPosts),
+            _buildPostList(listeningProvider.followingPosts),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _openPostMessage,
+          child: const Icon(Icons.create),
+        ),
       ),
     );
   }
 
   Widget _buildPostList(List<Post> posts) {
     return posts.isEmpty
-        ? const Center(
-            child: Text('Nothing to see here...'),
+        ? Center(
+            child: Text('Nothing to see here...', style: bodyTextTheme),
           )
         : ListView.builder(
             itemCount: posts.length,

@@ -5,6 +5,7 @@ import 'package:social_app/components/app_follow_button.dart';
 import 'package:social_app/components/app_input_alert_box.dart';
 import 'package:social_app/components/app_post_tile.dart';
 import 'package:social_app/components/app_profile_stats.dart';
+import 'package:social_app/helper/navigate_pages.dart';
 import 'package:social_app/models/user.dart';
 import 'package:social_app/pages/follow_list_page.dart';
 import 'package:social_app/services/auth/auth_service.dart';
@@ -128,6 +129,10 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         centerTitle: true,
         foregroundColor: Theme.of(context).colorScheme.primary,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () => goHomePage(context),
+        ),
       ),
       body: SafeArea(
         child: ListView(

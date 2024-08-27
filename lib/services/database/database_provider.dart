@@ -13,9 +13,12 @@ class DatabaseProvider extends ChangeNotifier {
 
   Future<void> updateBio(String bio) => _db.updateUserBioInFirebase(bio);
 
+  // Locally stored posts
   List<Post> _allPosts = [];
+  List<Post> _followingPosts = [];
 
   List<Post> get allPosts => _allPosts;
+  List<Post> get followingPosts => _followingPosts;
 
   // Post a message
   Future<void> postMessage(String message) async {
@@ -26,16 +29,29 @@ class DatabaseProvider extends ChangeNotifier {
   // Load all posts
   Future<void> loadAllPosts() async {
     final allPosts = await _db.getAllPostsFromFirebase();
-    // Get all Posts
-    _allPosts = allPosts;
 
     // Block Users id and filter Posts
     final blockedUsers = await _db.getBlockedUsersFromFirebase();
     _allPosts =
-        _allPosts.where((post) => !blockedUsers.contains(post.uid)).toList();
+        allPosts.where((post) => !blockedUsers.contains(post.uid)).toList();
 
+    // Load following posts
+    loadFollowingPosts();
     // Initialize like count and liked posts
     initializeLikeMap();
+
+    notifyListeners();
+  }
+
+  // Load following posts
+  Future<void> loadFollowingPosts() async {
+    String currentUserId = _auth.getUserId();
+
+    final followingUserId =
+        await _db.getFollowingUidsFromFirebase(currentUserId);
+
+    _followingPosts =
+        _allPosts.where((post) => followingUserId.contains(post.uid)).toList();
 
     notifyListeners();
   }

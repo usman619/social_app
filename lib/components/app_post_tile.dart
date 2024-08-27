@@ -1,7 +1,4 @@
-// import 'dart:js_interop';
-
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:social_app/components/app_input_alert_box.dart';
@@ -230,29 +227,28 @@ class _AppPostTileState extends State<AppPostTile> {
   }
 
   // Show follow button if the post is not the user's own post
-  // TODO: Implement follow functionality for other users if not followed yet
-  Widget _showFollowButthon() {
-    if (currentUid == widget.post.uid) {
-      return const SizedBox.shrink();
-    } else {
-      return TextButton(
-        onPressed: () {},
-        style: TextButton.styleFrom(
-          backgroundColor: Colors.blue,
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-        ),
-        child: Text(
-          'Follow',
-          style: bodyTextTheme.copyWith(
-            color: Colors.white,
-          ),
-        ),
-      );
-    }
-  }
+  // Widget _showFollowButthon() {
+  //   if (currentUid == widget.post.uid) {
+  //     return const SizedBox.shrink();
+  //   } else {
+  //     return TextButton(
+  //       onPressed: () {},
+  //       style: TextButton.styleFrom(
+  //         backgroundColor: Colors.blue,
+  //         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+  //         shape: RoundedRectangleBorder(
+  //           borderRadius: BorderRadius.circular(16),
+  //         ),
+  //       ),
+  //       child: Text(
+  //         'Follow',
+  //         style: bodyTextTheme.copyWith(
+  //           color: Colors.white,
+  //         ),
+  //       ),
+  //     );
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -317,7 +313,7 @@ class _AppPostTileState extends State<AppPostTile> {
                 ),
                 const Spacer(),
 
-                _showFollowButthon(),
+                // _showFollowButthon(),
                 const SizedBox(width: 5),
                 // More Options
                 GestureDetector(

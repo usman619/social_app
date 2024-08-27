@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:social_app/components/app_button.dart';
 import 'package:social_app/components/app_loading_circle.dart';
+import 'package:social_app/components/app_password_field.dart';
 import 'package:social_app/components/app_text_field.dart';
 import 'package:social_app/components/hashtag_svg.dart';
 import 'package:social_app/services/auth/auth_service.dart';
@@ -115,13 +116,13 @@ class _RegisterPageState extends State<RegisterPage> {
                     obscureText: false,
                   ),
                   const SizedBox(height: 20),
-                  AppTextField(
+                  AppPasswordField(
                     controller: passwordController,
                     labelText: "Enter your password",
                     obscureText: true,
                   ),
                   const SizedBox(height: 20),
-                  AppTextField(
+                  AppPasswordField(
                     controller: confirmPasswordController,
                     labelText: "Confirm your password",
                     obscureText: true,
