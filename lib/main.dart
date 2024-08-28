@@ -2,7 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:social_app/firebase_options.dart';
-
 import 'package:social_app/services/auth/auth_gate.dart';
 import 'package:social_app/services/database/database_provider.dart';
 import 'package:social_app/themes/theme_provider.dart';
